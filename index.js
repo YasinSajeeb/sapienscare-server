@@ -154,6 +154,22 @@ async function run() {
       }
     });
 
+    app.delete('/products/:id', async (req, res) => {
+      try {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        const result = await productsCollection.deleteOne(query);
+        if (result.deletedCount === 1) {
+          res.send({ message: 'Product deleted successfully' });
+        } else {
+          res.status(404).send({ message: 'Product not found' });
+        }
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        res.status(500).send({ message: 'Internal server error' });
+      }
+    });
+
     app.get('/bookingProducts', async(req, res) => {
       try {
         const query = {};
